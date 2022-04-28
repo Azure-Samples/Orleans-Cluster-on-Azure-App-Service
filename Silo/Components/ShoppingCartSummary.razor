@@ -1,0 +1,47 @@
+<MudCard Class="mud-height-full">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">Cart Summary</MudText>
+        </CardHeaderContent>
+        <CardHeaderActions>
+            <MudIconButton Icon="@Icons.Filled.AttachMoney" Color="Color.Default" />
+        </CardHeaderActions>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudList Dense=true>
+        @if (Items is null or { Count: 0 })
+        {
+            <MudListItem>
+                <MudText Typo=Typo.body1>Your cart is empty... ☹️</MudText>
+            </MudListItem>
+        }
+        else
+        {
+            foreach (var item in Items)
+            {
+                <MudDivider Light=false />
+                <MudListItem Class="d-flex">
+                    <MudText Typo=Typo.caption>
+                        @(item.Quantity)x @(item.Product.Name)
+                    </MudText>
+                    <MudText Typo=Typo.body2 Align="Align.End">
+                        @item.TotalPrice.ToString("C2")
+                    </MudText>
+                </MudListItem>
+            }
+            <MudDivider Light=true />
+            <MudListItem Class="d-flex">
+                <MudText Typo=Typo.body1>Pretax Total:</MudText>
+                <MudText Typo=Typo.body1 Align="Align.End">@_totalCost</MudText>
+            </MudListItem>
+        }
+        </MudList>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    string _totalCost => Items?.Sum(x => x.TotalPrice).ToString("C2") ?? "$0.00";
+
+    [Parameter, EditorRequired]
+    public HashSet<CartItem>? Items { get; set; }
+}

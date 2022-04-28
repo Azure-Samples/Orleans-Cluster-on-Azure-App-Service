@@ -1,0 +1,45 @@
+name: Deploy to Azure App Service
+
+on:
+  push:
+    branches:
+    - main
+
+env:
+  AZURE_RESOURCE_GROUP_NAME: orleans-resourcegroup
+  AZURE_RESOURCE_GROUP_LOCATION: centralus
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET 6.0
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+
+    - name: .NET publish shopping cart app
+      run: dotnet publish ./Silo/Orleans.ShoppingCart.Silo.csproj --configuration Release
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: Flex bicep
+      run: |
+        az deployment group create \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME }} \
+          --template-file '.github/workflows/flex/main.bicep' \
+          --parameters resourceGroupName=${{ env.AZURE_RESOURCE_GROUP_NAME }} \
+            resourceGroupLocation=${{ env.AZURE_RESOURCE_GROUP_LOCATION }} \
+          --debug
+
+    - name: Webapp deploy
+      run: |
+        az webapp deploy --name "orleans-app-silo" \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME  }} \
+          --clean true --restart true \
+          --type zip --src-path silo.zip --debug

@@ -1,0 +1,35 @@
+@inherits LayoutComponentBase
+
+@inject ILocalStorageService LocalStorage
+
+<MudThemeProvider
+    @bind-IsDarkMode="@_isDarkTheme"
+    Theme="_theme" />
+<MudDialogProvider
+    FullWidth="true"
+    MaxWidth="MaxWidth.Medium"
+    CloseButton="true"
+    DisableBackdropClick="false"
+    Position="DialogPosition.Center"
+    CloseOnEscapeKey="true" />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="0">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudSpacer />
+        <MudSwitch Checked="@_isDarkTheme" CheckedChanged=OnCheckedChangedAsync Color="Color.Primary" Class="ma-4" T="bool" Label="Theme Toggle"/>
+        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/dotnet/orleans/tree/main/samples/ShoppingCart" Target="_blank" />
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="0">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h5" Color=Color.Surface>Shopping Cart</MudText>
+        </MudDrawerHeader>
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent Class="mt-3">
+        <MudContainer MaxWidth="MaxWidth.False">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>

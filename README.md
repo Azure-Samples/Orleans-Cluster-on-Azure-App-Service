@@ -1,24 +1,39 @@
-# Project Name
+# Microsoft Orleans: Shopping Cart App
 
-(short, 1-3 sentenced, description of the project)
+A canonical shopping cart sample application, built using Microsoft Orleans. This app shows the following features:
+
+- **Shopping cart**: A simple shopping cart application that uses Orleans for its cross-platform framework support, and its scalable distributed applications capabilities.
+
+  - **Inventory management**: Edit and/or create product inventory.
+  - **Shop inventory**: Explore purchasable products and add them to your cart.
+  - **Cart**: View a summary of all the items in your cart, and manage these items; either removing or changing the quantity of each item.
+
+![Shopping Cart sample app running.](media/shopping-cart.png)
 
 ## Features
 
-This project framework provides the following features:
+- [Orleans: Grain persistence](https://docs.microsoft.com/dotnet/orleans/grains/grain-persistence)
+  - [Azure Storage grain persistence](https://docs.microsoft.com/dotnet/orleans/grains/grain-persistence/azure-storage)
+- [Orleans: Cluster management](https://docs.microsoft.com/dotnet/orleans/implementation/cluster-management)
+- [Orleans: Code generation](https://docs.microsoft.com/dotnet/orleans/grains/code-generation)
+- [Orleans: Startup tasks](https://docs.microsoft.com/dotnet/orleans/host/configuration-guide/startup-tasks)
+- [Azure Bicep](https://docs.microsoft.com/azure/azure-resource-manager/bicep)
+- [Azure App Service](https://docs.microsoft.com/azure/app-service/overview)
+- [GitHub Actions and .NET](https://docs.microsoft.com/dotnet/devops/github-actions-overview)
 
-* Feature 1
-* Feature 2
-* ...
+The app is architected as follows:
 
-## Getting Started
+![Shopping Cart sample app architecture.](media/shopping-cart-arch.png)
+
+## Get Started
 
 ### Prerequisites
 
-(ideally very short, if any)
-
-- OS
-- Library version
-- ...
+- A [GitHub account](https://github.com/join)
+- The [.NET 6 SDK or later](https://dotnet.microsoft.com/download/dotnet)
+- The [Azure CLI](/cli/azure/install-azure-cli)
+- A .NET integrated development environment (IDE)
+  - Feel free to use the [Visual Studio IDE](https://visualstudio.microsoft.com) or the [Visual Studio Code](https://code.visualstudio.com)
 
 ### Installation
 
