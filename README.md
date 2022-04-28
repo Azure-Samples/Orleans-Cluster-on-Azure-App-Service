@@ -12,6 +12,8 @@ A canonical shopping cart sample application, built using Microsoft Orleans. Thi
 
 ## Features
 
+- [.NET 6](https://docs.microsoft.com/dotnet/core/whats-new/dotnet-6)
+- [ASP.NET Core Blazor](https://docs.microsoft.com/aspnet/core/blazor/?view=aspnetcore-6.0)
 - [Orleans: Grain persistence](https://docs.microsoft.com/dotnet/orleans/grains/grain-persistence)
   - [Azure Storage grain persistence](https://docs.microsoft.com/dotnet/orleans/grains/grain-persistence/azure-storage)
 - [Orleans: Cluster management](https://docs.microsoft.com/dotnet/orleans/implementation/cluster-management)
@@ -35,38 +37,22 @@ The app is architected as follows:
 - A .NET integrated development environment (IDE)
   - Feel free to use the [Visual Studio IDE](https://visualstudio.microsoft.com) or the [Visual Studio Code](https://code.visualstudio.com)
 
-### Installation
-
-(ideally very short)
-
-- npm install [package name]
-- mvn install
-- ...
-
 ### Quickstart
-(Add steps to get up and running quickly)
 
-1. git clone [repository clone url]
-2. cd [respository name]
-3. ...
+1. `git clone https://github.com/Azure-Samples/Orleans-Cluster-on-Azure-App-Service.git orleans-on-app-service`
+2. `cd orleans-on-app-service`
+3. `dotnet run --project Silo\Orleans.ShoppingCart.Silo.csproj`
 
+### Acknowledgements
 
-## Demo
+Uses the following open-source 3rd party projects:
 
-A demo app is included to show how to use the project.
+- [MudBlazor](https://github.com/MudBlazor/MudBlazor): Blazor Component Library based on Material design.
+- [Bogus](https://github.com/bchavez/Bogus): A simple fake data generator for C#, F#, and VB.NET.
+- [Blazorators](https://github.com/IEvangelist/blazorators): Source-generated packages for Blazor JavaScript interop.
 
-To run the demo, follow these steps:
-
-(Add steps to start up the demo)
-
-1.
-2.
-3.
+Derived from [IEvangelist/orleans-shopping-cart](https://github.com/IEvangelist/orleans-shopping-cart).
 
 ## Resources
 
-(Any additional resources or related projects)
-
-- Link to supporting information
-- Link to similar sample
-- ...
+- [Deploy Orleans to Azure App Service](https://aka.ms/orleans-on-app-service)

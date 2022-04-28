@@ -16,7 +16,6 @@ public sealed class Startup
         services.AddSingleton<ProductService>();
         services.AddScoped<ComponentStateChangedObserver>();
         services.AddSingleton<ToastService>();
-        services.AddSessionStorageServices();
         services.AddLocalStorageServices();
     }
 
