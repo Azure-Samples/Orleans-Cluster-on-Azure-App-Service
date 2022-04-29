@@ -48,7 +48,7 @@ public partial class MainLayout
             OverlayLight = "#1e1e2d80"
         },
     };
-    
+
     bool _drawerOpen = true;
     bool _isDarkTheme;
 
@@ -75,7 +75,7 @@ public partial class MainLayout
         }
     }
 
-    async Task OnCheckedChangedAsync(bool value) =>
+    async Task OnToggledChangedAsync(bool value) =>
         await LocalStorage.SetItemAsync(
             PrefersDarkThemeKey, (_isDarkTheme = value).ToString());
 
