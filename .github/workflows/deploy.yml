@@ -6,6 +6,7 @@ on:
     - main
 
 env:
+  UNIQUE_APP_NAME: cartify
   AZURE_RESOURCE_GROUP_NAME: orleans-resourcegroup
   AZURE_RESOURCE_GROUP_LOCATION: centralus
 
@@ -33,13 +34,13 @@ jobs:
         az deployment group create \
           --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME }} \
           --template-file '.github/workflows/flex/main.bicep' \
-          --parameters resourceGroupName=${{ env.AZURE_RESOURCE_GROUP_NAME }} \
-            resourceGroupLocation=${{ env.AZURE_RESOURCE_GROUP_LOCATION }} \
+          --parameters resourceGroupLocation=${{ env.AZURE_RESOURCE_GROUP_LOCATION }} \
+            appName=${{ env.UNIQUE_APP_NAME }}
           --debug
 
     - name: Webapp deploy
       run: |
-        az webapp deploy --name "orleans-app-silo" \
+        az webapp deploy --name ${{ env.UNIQUE_APP_NAME }} \
           --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME  }} \
           --clean true --restart true \
           --type zip --src-path silo.zip --debug

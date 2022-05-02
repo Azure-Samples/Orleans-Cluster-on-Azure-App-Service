@@ -1,14 +1,13 @@
 param appName string
-param resourceGroupName string
-param resourceGroupLocation string
+param location string
 param vnetSubnetId string
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
 param storageConnectionString string
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
-  name: '${resourceGroupName}-plan'
-  location: resourceGroupLocation
+  name: '${appName}-plan'
+  location: location
   kind: 'app'
   sku: {
     name: 'S1'
@@ -18,7 +17,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 
 resource appService 'Microsoft.Web/sites@2021-03-01' = {
   name: appName
-  location: resourceGroupLocation
+  location: location
   kind: 'app'
   properties: {
     serverFarmId: appServicePlan.id
