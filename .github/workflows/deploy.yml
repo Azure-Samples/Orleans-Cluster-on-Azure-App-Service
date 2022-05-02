@@ -6,7 +6,7 @@ on:
     - main
 
 env:
-  AZURE_RESOURCE_GROUP_NAME: orleans-resourcegroup
+  AZURE_RESOURCE_GROUP_NAME: orleansonappsvc
   AZURE_RESOURCE_GROUP_LOCATION: centralus
 
 jobs:
@@ -39,7 +39,7 @@ jobs:
 
     - name: Webapp deploy
       run: |
-        az webapp deploy --name "orleans-app-silo" \
+        az webapp deploy --name "orleansonappsvc-app-silo" \
           --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME  }} \
           --clean true --restart true \
           --type zip --src-path silo.zip --debug
