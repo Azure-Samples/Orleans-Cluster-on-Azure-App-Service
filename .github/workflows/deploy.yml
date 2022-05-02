@@ -35,7 +35,7 @@ jobs:
           --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME }} \
           --template-file '.github/workflows/flex/main.bicep' \
           --parameters location=${{ env.AZURE_RESOURCE_GROUP_LOCATION }} \
-            appName=${{ env.UNIQUE_APP_NAME }}
+            appName=${{ env.UNIQUE_APP_NAME }} \
           --debug
 
     - name: Webapp deploy
