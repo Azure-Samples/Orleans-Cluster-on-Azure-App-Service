@@ -19,7 +19,7 @@ module logsModule 'logs-and-insights.bicep' = {
 }
 
 resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
-  name: 'orleans-vnet'
+  name: '${appName}-vnet'
   location: location
   properties: {
     addressSpace: {
