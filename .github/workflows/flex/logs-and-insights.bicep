@@ -1,10 +1,10 @@
 param operationalInsightsName string
 param appInsightsName string
-param resourceGroupLocation string
+param location string
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: appInsightsName
-  location: resourceGroupLocation
+  location: location
   kind: 'web'
   properties: {
     Application_Type: 'web'
@@ -14,7 +14,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
 
 resource logs 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: operationalInsightsName
-  location: resourceGroupLocation
+  location: location
   properties: {
     retentionInDays: 30
     features: {

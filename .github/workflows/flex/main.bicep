@@ -1,26 +1,26 @@
-param resourceGroupName string = resourceGroup().name
-param resourceGroupLocation string = resourceGroup().location
+param appName string
+param location string = resourceGroup().location
 
 module storageModule 'storage.bicep' = {
   name: 'orleansStorageModule'
   params: {
-    name: replace(resourceGroupName, '-resourcegroup', 'storage')
-    resourceGroupLocation: resourceGroupLocation
+    name: '${appName}storage'
+    location: location
   }
 }
 
 module logsModule 'logs-and-insights.bicep' = {
   name: 'orleansLogModule'
   params: {
-    operationalInsightsName: replace(resourceGroupName, 'resourcegroup', 'logs')
-    appInsightsName: replace(resourceGroupName, 'resourcegroup', 'insights')
-    resourceGroupLocation: resourceGroupLocation
+    operationalInsightsName: '${appName}-logs'
+    appInsightsName: '${appName}-insights'
+    location: location
   }
 }
 
 resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
-  name: 'orleans-vnet'
-  location: resourceGroupLocation
+  name: '${appName}-vnet'
+  location: location
   properties: {
     addressSpace: {
       addressPrefixes: [
@@ -49,9 +49,8 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
 module siloModule 'app-service.bicep' = {
   name: 'orleansSiloModule'
   params: {
-    appName: replace(resourceGroupName, '-resourcegroup', '-app-silo')
-    resourceGroupName: resourceGroupName
-    resourceGroupLocation: resourceGroupLocation
+    appName: appName
+    location: location
     vnetSubnetId: vnet.properties.subnets[0].id
     appInsightsConnectionString: logsModule.outputs.appInsightsConnectionString
     appInsightsInstrumentationKey: logsModule.outputs.appInsightsInstrumentationKey
