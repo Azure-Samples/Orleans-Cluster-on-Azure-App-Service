@@ -34,7 +34,7 @@ jobs:
         az deployment group create \
           --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME }} \
           --template-file '.github/workflows/flex/main.bicep' \
-          --parameters resourceGroupLocation=${{ env.AZURE_RESOURCE_GROUP_LOCATION }} \
+          --parameters location=${{ env.AZURE_RESOURCE_GROUP_LOCATION }} \
             appName=${{ env.UNIQUE_APP_NAME }}
           --debug
 
