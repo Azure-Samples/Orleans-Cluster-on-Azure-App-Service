@@ -6,9 +6,9 @@ on:
     - main
 
 env:
-  UNIQUE_APP_NAME: cartify
-  AZURE_RESOURCE_GROUP_NAME: orleans-resourcegroup
-  AZURE_RESOURCE_GROUP_LOCATION: centralus
+  UNIQUE_APP_NAME: cartifybradyg
+  AZURE_RESOURCE_GROUP_NAME: orleans-store
+  AZURE_RESOURCE_GROUP_LOCATION: eastus
 
 jobs:
   build-and-deploy:
