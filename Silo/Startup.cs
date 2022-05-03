@@ -17,6 +17,7 @@ public sealed class Startup
         services.AddScoped<ComponentStateChangedObserver>();
         services.AddSingleton<ToastService>();
         services.AddLocalStorageServices();
+        services.AddApplicationInsights("Silo");
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
