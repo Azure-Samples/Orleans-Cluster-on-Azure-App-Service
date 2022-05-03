@@ -42,9 +42,10 @@ public sealed class InventoryGrain : Grain, IInventoryGrain
         {
             return;
         }
-
+        
         await Parallel.ForEachAsync(
-            _productIds.State,
+            _productIds.State, // Explicitly use the current task-scheduler.
+            new ParallelOptions { TaskScheduler = TaskScheduler.Current },
             async (id, _) =>
             {
                 var productGrain = GrainFactory.GetGrain<IProductGrain>(id);
