@@ -7,7 +7,7 @@ on:
 
 env:
   UNIQUE_APP_NAME: cartify
-  AZURE_RESOURCE_GROUP_NAME: orleans-resourcegroup
+  AZURE_RESOURCE_GROUP_NAME: Experiments
   AZURE_RESOURCE_GROUP_LOCATION: centralus
 
 jobs:
