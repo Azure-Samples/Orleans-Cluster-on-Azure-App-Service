@@ -6,7 +6,7 @@ on:
     - main
 
 env:
-  UNIQUE_APP_NAME: cartify
+  UNIQUE_APP_NAME: eb2tech
   AZURE_RESOURCE_GROUP_NAME: Experiments
   AZURE_RESOURCE_GROUP_LOCATION: centralus
 
