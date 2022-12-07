@@ -6,7 +6,7 @@ on:
     - main
 
 env:
-  UNIQUE_APP_NAME: orleanscart
+  UNIQUE_APP_NAME: devint22cart
   AZURE_RESOURCE_GROUP_NAME: orleanscartrg
   AZURE_RESOURCE_GROUP_LOCATION: westus
 
