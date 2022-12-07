@@ -8,7 +8,7 @@ on:
 env:
   UNIQUE_APP_NAME: orleanscart
   AZURE_RESOURCE_GROUP_NAME: orleanscartrg
-  AZURE_RESOURCE_GROUP_LOCATION: eastus
+  AZURE_RESOURCE_GROUP_LOCATION: westus
 
 jobs:
   build-and-deploy:
