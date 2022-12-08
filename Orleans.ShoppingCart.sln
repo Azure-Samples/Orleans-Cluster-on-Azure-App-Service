@@ -11,17 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orleans.ShoppingCart.Grains
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{11BA234D-2EF9-4DA5-89CA-7FAF07ED27B7}"
 	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
 		.gitignore = .gitignore
-		.github\workflows\flex\app-service.bicep = .github\workflows\flex\app-service.bicep
-		.github\workflows\deploy.yml = .github\workflows\deploy.yml
-		global.json = global.json
-		.github\workflows\flex\logs-and-insights.bicep = .github\workflows\flex\logs-and-insights.bicep
-		.github\workflows\flex\main.bicep = .github\workflows\flex\main.bicep
 		README.md = README.md
 		media\shopping-cart-arch.png = media\shopping-cart-arch.png
 		media\shopping-cart.png = media\shopping-cart.png
-		.github\workflows\flex\storage.bicep = .github\workflows\flex\storage.bicep
 	EndProjectSection
 EndProject
 Global

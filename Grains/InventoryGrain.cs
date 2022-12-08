@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT License.
 
+using Orleans.Runtime;
+
 namespace Orleans.ShoppingCart.Grains;
 
 [Reentrant]
@@ -15,7 +17,7 @@ public sealed class InventoryGrain : Grain, IInventoryGrain
             storageName: "shopping-cart")]
         IPersistentState<HashSet<string>> state) => _productIds = state;
 
-    public override Task OnActivateAsync() => PopulateProductCacheAsync();
+    public override Task OnActivateAsync(CancellationToken _) => PopulateProductCacheAsync();
 
     Task<HashSet<ProductDetails>> IInventoryGrain.GetAllProductsAsync() =>
         Task.FromResult(_productCache.Values.ToHashSet());
@@ -42,10 +44,9 @@ public sealed class InventoryGrain : Grain, IInventoryGrain
         {
             return;
         }
-        
+
         await Parallel.ForEachAsync(
-            _productIds.State, // Explicitly use the current task-scheduler.
-            new ParallelOptions { TaskScheduler = TaskScheduler.Current },
+            _productIds.State,
             async (id, _) =>
             {
                 var productGrain = GrainFactory.GetGrain<IProductGrain>(id);
