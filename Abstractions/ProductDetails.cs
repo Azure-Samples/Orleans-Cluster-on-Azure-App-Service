@@ -3,7 +3,7 @@
 
 namespace Orleans.ShoppingCart.Abstractions;
 
-[Serializable, Immutable]
+[GenerateSerializer, Immutable]
 public sealed record class ProductDetails
 {
     public string Id { get; set; } = null!;
