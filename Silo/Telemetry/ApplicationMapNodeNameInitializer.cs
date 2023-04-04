@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT License.
 
-namespace Orleans.ShoppingCart.Silo.Telemtry;
+namespace Orleans.ShoppingCart.Silo.Telemetry;
 
 internal class ApplicationMapNodeNameInitializer : ITelemetryInitializer
 {
