@@ -6,7 +6,7 @@ on:
     - main
 
 env:
-  UNIQUE_APP_NAME: devint22cart
+  UNIQUE_APP_NAME: net7cart
   AZURE_RESOURCE_GROUP_NAME: orleanscartrg
   AZURE_RESOURCE_GROUP_LOCATION: westus
 
@@ -14,12 +14,12 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - name: Setup .NET 6.0
-      uses: actions/setup-dotnet@v1
+    - name: Setup .NET 7.0
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 7.0.x
 
     - name: .NET publish shopping cart app
       run: dotnet publish ./Silo/Orleans.ShoppingCart.Silo.csproj --configuration Release
@@ -41,6 +41,14 @@ jobs:
     - name: Webapp deploy
       run: |
         az webapp deploy --name ${{ env.UNIQUE_APP_NAME }} \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME  }} \
+          --clean true --restart true \
+          --type zip --src-path silo.zip --debug
+
+    - name: Staging deploy
+      run: |
+        az webapp deploy --name ${{ env.UNIQUE_APP_NAME }} \
+          --slot ${{ env.UNIQUE_APP_NAME }}stg \
           --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME  }} \
           --clean true --restart true \
           --type zip --src-path silo.zip --debug
