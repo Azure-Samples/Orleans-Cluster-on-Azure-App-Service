@@ -17,4 +17,4 @@ global using Orleans.ShoppingCart.Silo;
 global using Orleans.ShoppingCart.Silo.Extensions;
 global using Orleans.ShoppingCart.Silo.Services;
 global using Orleans.ShoppingCart.Silo.StartupTasks;
-global using Orleans.ShoppingCart.Silo.Telemtry;
+global using Orleans.ShoppingCart.Silo.Telemetry;

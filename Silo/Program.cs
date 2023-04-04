@@ -14,9 +14,9 @@ await Host.CreateDefaultBuilder(args)
             else
             {
                 var endpointAddress =
-                    IPAddress.Parse(context.Configuration["WEBSITE_PRIVATE_IP"]);
+                    IPAddress.Parse(context.Configuration["WEBSITE_PRIVATE_IP"]!);
                 var strPorts =
-                    context.Configuration["WEBSITE_PRIVATE_PORTS"].Split(',');
+                    context.Configuration["WEBSITE_PRIVATE_PORTS"]!.Split(',');
                 if (strPorts.Length < 2)
                     throw new Exception("Insufficient private ports configured.");
                 var (siloPort, gatewayPort) =
@@ -29,13 +29,20 @@ await Host.CreateDefaultBuilder(args)
                     .Configure<ClusterOptions>(
                         options =>
                         {
-                            options.ClusterId = "ShoppingCartCluster";
+                            options.ClusterId = context.Configuration["ORLEANS_CLUSTER_ID"];
                             options.ServiceId = nameof(ShoppingCartService);
-                        }).UseAzureStorageClustering(                    
-                    options => options.ConfigureTableServiceClient(connectionString));
-                builder.AddAzureTableGrainStorage(
-                    "shopping-cart",                    
-                    options => options.ConfigureTableServiceClient(connectionString));
+                        })
+                    .UseAzureStorageClustering(
+                        options =>
+                        {
+                            options.ConfigureTableServiceClient(connectionString);
+                            options.TableName = $"{context.Configuration["ORLEANS_CLUSTER_ID"]}Clustering";
+                        })
+                    .AddAzureTableGrainStorage("shopping-cart",
+                        options => {
+                            options.ConfigureTableServiceClient(connectionString);
+                            options.TableName = $"{context.Configuration["ORLEANS_CLUSTER_ID"]}Persistence";
+                        });
             }
         })
     .ConfigureWebHostDefaults(
