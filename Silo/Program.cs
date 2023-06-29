@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT License.
 
+using System.Net;
+
 await Host.CreateDefaultBuilder(args)
     .UseOrleans(
         (context, builder) =>
