@@ -17,7 +17,7 @@ public sealed class InventoryGrain : Grain, IInventoryGrain
             storageName: "shopping-cart")]
         IPersistentState<HashSet<string>> state) => _productIds = state;
 
-    public override Task OnActivateAsync(CancellationToken _) => PopulateProductCacheAsync();
+    public override Task OnActivateAsync(CancellationToken cancellationToken) => PopulateProductCacheAsync(cancellationToken);
 
     Task<HashSet<ProductDetails>> IInventoryGrain.GetAllProductsAsync() =>
         Task.FromResult(_productCache.Values.ToHashSet());
@@ -38,7 +38,7 @@ public sealed class InventoryGrain : Grain, IInventoryGrain
         await _productIds.WriteStateAsync();
     }
 
-    private async Task PopulateProductCacheAsync()
+    private async Task PopulateProductCacheAsync(CancellationToken cancellationToken)
     {
         if (_productIds is not { State.Count: > 0 })
         {
@@ -46,7 +46,12 @@ public sealed class InventoryGrain : Grain, IInventoryGrain
         }
 
         await Parallel.ForEachAsync(
-            _productIds.State,
+            _productIds.State, // Explicitly use the current task-scheduler.
+            new ParallelOptions
+            {
+                TaskScheduler = TaskScheduler.Current,
+                CancellationToken = cancellationToken,
+            },
             async (id, _) =>
             {
                 var productGrain = GrainFactory.GetGrain<IProductGrain>(id);
