@@ -12,7 +12,7 @@
     <PackageReference Include="Blazor.Serialization" Version="2.0.11" />
     <PackageReference Include="Blazor.LocalStorage" Version="2.0.11" />
     <PackageReference Include="Bogus" Version="34.0.2" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
     <PackageReference Include="Microsoft.Orleans.Clustering.AzureStorage" Version="7.0.0" />
     <PackageReference Include="Microsoft.Orleans.Persistence.AzureStorage" Version="7.0.0" />
     <PackageReference Include="Microsoft.Orleans.Server" Version="7.0.0" />
