@@ -43,7 +43,6 @@ public sealed partial class Products
             DetailsUrl = fake.DetailsUrl
         };
         await ProductService.CreateOrUpdateProductAsync(product);
-        await ProductService.CreateOrUpdateProductAsync(product);
         _products = await InventoryService.GetAllProductsAsync();
 
         _modal?.Close();
