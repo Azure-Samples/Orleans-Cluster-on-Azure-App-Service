@@ -29,21 +29,19 @@ public sealed partial class Products
     {
         if (_modal is not null)
         {
-            var product = new ProductDetails();
-            var faker = product.GetBogusFaker();
-            var fake = faker.Generate();
-            _modal.Product = product with
-            {
-                Id = fake.Id,
-                ImageUrl = fake.ImageUrl,
-                DetailsUrl = fake.DetailsUrl
-            };
             _modal.Open("Create Product", OnProductUpdated);
         }
     }
 
     private async Task OnProductUpdated(ProductDetails product)
     {
+        var fake = faker.Generate();
+        product = product with
+        {
+            Id = fake.Id,
+            ImageUrl = fake.ImageUrl,
+            DetailsUrl = fake.DetailsUrl
+        };
         await ProductService.CreateOrUpdateProductAsync(product);
         _products = await InventoryService.GetAllProductsAsync();
 
