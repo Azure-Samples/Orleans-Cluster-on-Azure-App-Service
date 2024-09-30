@@ -25,11 +25,11 @@ public sealed partial class Products
     protected override async Task OnInitializedAsync() =>
         _products = await InventoryService.GetAllProductsAsync();
 
-    private void CreateNewProduct()
+    private async Task CreateNewProductAsync()
     {
         if (_modal is not null)
         {
-            _modal.Open("Create Product", OnProductUpdated);
+            await _modal.OpenAsync("Create Product", OnProductUpdated);
         }
     }
 

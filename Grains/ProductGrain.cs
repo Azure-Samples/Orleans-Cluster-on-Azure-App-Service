@@ -3,43 +3,42 @@
 
 namespace Orleans.ShoppingCart.Grains;
 
-internal class ProductGrain : Grain, IProductGrain
-{
-    private readonly IPersistentState<ProductDetails> _product;
-
-    public ProductGrain(
-        [PersistentState(
+[Reentrant]
+internal sealed class ProductGrain(
+    [PersistentState(
             stateName: "Product",
             storageName: "shopping-cart")]
-        IPersistentState<ProductDetails> product) => _product = product;
+        IPersistentState<ProductDetails> state) : Grain, IProductGrain
+{
+    private readonly StateManager _stateManager = new(state);
 
     Task<int> IProductGrain.GetProductAvailabilityAsync() => 
-        Task.FromResult(_product.State.Quantity);
+        Task.FromResult(state.State.Quantity);
 
     Task<ProductDetails> IProductGrain.GetProductDetailsAsync() => 
-        Task.FromResult(_product.State);
+        Task.FromResult(state.State);
 
     Task IProductGrain.ReturnProductAsync(int quantity) =>
-        UpdateStateAsync(_product.State with
+        UpdateStateAsync(state.State with
         {
-            Quantity = _product.State.Quantity + quantity
+            Quantity = state.State.Quantity + quantity
         });
 
     async Task<(bool IsAvailable, ProductDetails? ProductDetails)> IProductGrain.TryTakeProductAsync(int quantity)
     {
-        if (_product.State.Quantity < quantity)
+        if (state.State.Quantity < quantity)
         {
             return (false, null);
         }
 
-        var updatedState = _product.State with
+        var updatedState = state.State with
         {
-            Quantity = _product.State.Quantity - quantity
+            Quantity = state.State.Quantity - quantity
         };
 
         await UpdateStateAsync(updatedState);
 
-        return (true, _product.State);
+        return (true, state.State);
     }
 
     Task IProductGrain.CreateOrUpdateProductAsync(ProductDetails productDetails) =>
@@ -48,12 +47,12 @@ internal class ProductGrain : Grain, IProductGrain
     private async Task UpdateStateAsync(ProductDetails product)
     {
         ArgumentNullException.ThrowIfNull(product.Id);
-        var oldCategory = _product.State.Category;
+        var oldCategory = state.State.Category;
 
-        _product.State = product;
-        await _product.WriteStateAsync();
+        state.State = product;
+        await _stateManager.WriteStateAsync();
 
-        var inventoryGrain = GrainFactory.GetGrain<IInventoryGrain>(_product.State.Category.ToString());
+        var inventoryGrain = GrainFactory.GetGrain<IInventoryGrain>(state.State.Category.ToString());
         await inventoryGrain.AddOrUpdateProductAsync(product);
 
         if (oldCategory != product.Category)
