@@ -3,6 +3,7 @@
 
 namespace Orleans.ShoppingCart.Abstractions;
 
+[GenerateSerializer]
 public enum ProductCategory
 {
     Accessories,

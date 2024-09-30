@@ -1,13 +1,13 @@
 @using Blazor.Serialization.Extensions
 
 <MudStack>
-    <MudToolBar DisableGutters="true">
+    <MudToolBar Gutters="false">
         <MudText Typo="Typo.h4">@Title</MudText>
         <MudSpacer />
         @ChildContent
-        <MudPaper Outlined="true" Class="flex-grow-1 pb-2 pl-3">
+        <MudPaper Outlined="true" Class="flex-grow-1 pa-2 ma-3">
             <MudTextField @bind-Value="_filter" Placeholder="Search products" Adornment="Adornment.Start"
-                AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-n2" DisableUnderLine="true">
+                AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="d-flex justify-center" Underline=false>
             </MudTextField>
         </MudPaper>
     </MudToolBar>
@@ -18,22 +18,22 @@
               IsEditRowSwitchingBlocked=true>
         <HeaderContent>
             <MudTh>
-                <MudTableSortLabel SortBy=@(new Func<ProductDetails, object>(p => p.Name))>
+                <MudTableSortLabel SortBy=@(new Func<ProductDetails, object>(p => p.Name!))>
                     Name
                 </MudTableSortLabel>
             </MudTh>
             <MudTh>
-                <MudTableSortLabel SortBy=@(new Func<ProductDetails, object>(p => p.Description))>
+                <MudTableSortLabel SortBy=@(new Func<ProductDetails, object>(p => p.Description!))>
                     Description
                 </MudTableSortLabel>
             </MudTh>
             <MudTh>
-                <MudTableSortLabel SortBy=@(new Func<ProductDetails, object>(p => p.Quantity))>
+                <MudTableSortLabel SortBy=@(new Func<ProductDetails, object>(p => p.Quantity!))>
                     Quantity
                 </MudTableSortLabel>
             </MudTh>
             <MudTh>
-                <MudTableSortLabel SortBy=@(new Func<ProductDetails, object>(p => p.UnitPrice))>
+                <MudTableSortLabel SortBy=@(new Func<ProductDetails, object>(p => p.UnitPrice!))>
                     Price
                 </MudTableSortLabel>
             </MudTh>

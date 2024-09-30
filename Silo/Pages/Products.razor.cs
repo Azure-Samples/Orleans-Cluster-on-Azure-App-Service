@@ -35,7 +35,7 @@ public sealed partial class Products
 
     private async Task OnProductUpdated(ProductDetails product)
     {
-        var fake = faker.Generate();
+        var fake = ProductDetailsExtensions.ProductDetailsFaker.Generate();
         product = product with
         {
             Id = fake.Id,

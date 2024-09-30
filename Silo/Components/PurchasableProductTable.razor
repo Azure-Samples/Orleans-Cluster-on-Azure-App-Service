@@ -1,10 +1,10 @@
 <MudStack>
-    <MudToolBar DisableGutters="true">
+    <MudToolBar Gutters="false">
         <MudText Typo="Typo.h4">@Title</MudText>
         <MudSpacer />
-        <MudPaper Outlined="true" Class="flex-grow-1 pb-2 pl-3">
+        <MudPaper Outlined="true" Class="flex-grow-1 pa-2 ma-3">
             <MudTextField @bind-Value="_filter" Placeholder="Search products" Adornment="Adornment.Start"
-                AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-n2" DisableUnderLine="true">
+                AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="d-flex justify-center" Underline="false">
             </MudTextField>
         </MudPaper>
     </MudToolBar>
@@ -13,22 +13,22 @@
         <HeaderContent>
             <MudTh>Products</MudTh>
             <MudTh>
-                <MudTableSortLabel SortBy=@(new Func<ProductDetails, object>(p => p.Name))>
+                <MudTableSortLabel SortBy=@(new Func<ProductDetails, object>(p => p.Name!))>
                     Name
                 </MudTableSortLabel>
             </MudTh>
             <MudTh>
-                <MudTableSortLabel SortBy=@(new Func<ProductDetails, object>(p => p.Description))>
+                <MudTableSortLabel SortBy=@(new Func<ProductDetails, object>(p => p.Description!))>
                     Description
                 </MudTableSortLabel>
             </MudTh>
             <MudTh>
-                <MudTableSortLabel SortBy=@(new Func<ProductDetails, object>(p => p.Quantity))>
+                <MudTableSortLabel SortBy=@(new Func<ProductDetails, object>(p => p.Quantity!))>
                     Quantity
                 </MudTableSortLabel>
             </MudTh>
             <MudTh>
-                <MudTableSortLabel SortBy=@(new Func<ProductDetails, object>(p => p.UnitPrice))>
+                <MudTableSortLabel SortBy=@(new Func<ProductDetails, object>(p => p.UnitPrice!))>
                     Price
                 </MudTableSortLabel>
             </MudTh>
@@ -37,7 +37,7 @@
             <MudTd>
                 <MudFab Disabled=@(IsInCart?.Invoke(product) ?? false) Size=Size.Small
                     Color=Color.Primary StartIcon=@Icons.Material.Filled.AddShoppingCart
-                    OnClick=@(async _ => await AddToCartAsync(product.Id))/>
+                    OnClick="@(() => AddToCartAsync(product.Id!))"/>
             </MudTd>
             <MudTd DataLabel="Name">@product.Name</MudTd>
             <MudTd DataLabel="Description">@product.Description</MudTd>
@@ -65,10 +65,13 @@
     [Parameter, EditorRequired]
     public Func<ProductDetails, bool> IsInCart { get; set; } = null!;
 
-    Task AddToCartAsync(string productId) =>
-        OnAddedToCart.HasDelegate
-            ? OnAddedToCart.InvokeAsync(productId)
-            : Task.CompletedTask;
+    async Task AddToCartAsync(string productId)
+    {
+        if (OnAddedToCart is { HasDelegate: true} onAddedToCart)
+        {
+            await onAddedToCart.InvokeAsync(productId);
+        }
+    }
 
     bool OnFilter(ProductDetails product) => product.MatchesFilter(_filter);
 }

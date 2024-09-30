@@ -5,7 +5,7 @@ namespace Orleans.ShoppingCart.Silo.Extensions;
 
 internal static class ProductDetailsExtensions
 {
-    internal static Faker<ProductDetails> GetBogusFaker(this ProductDetails productDetails) =>
+    internal static readonly Faker<ProductDetails> ProductDetailsFaker =
         new Faker<ProductDetails>()
             .StrictMode(true)
             .RuleFor(p => p.Id, (f, p) => f.Random.Number(1, 100_000).ToString())
@@ -26,8 +26,8 @@ internal static class ProductDetailsExtensions
 
         if (product is not null)
         {
-            return product.Name.Contains(filter, StringComparison.OrdinalIgnoreCase)
-                || product.Description.Contains(filter, StringComparison.OrdinalIgnoreCase);
+            return (product.Name is { } name && name.Contains(filter, StringComparison.OrdinalIgnoreCase))
+                || (product.Description is { } description && description.Contains(filter, StringComparison.OrdinalIgnoreCase));
         }
 
         return false;

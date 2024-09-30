@@ -11,8 +11,8 @@ public sealed class SeedProductStoreTask : IStartupTask
         _grainFactory = grainFactory;
 
     async Task IStartupTask.Execute(CancellationToken cancellationToken)
-    {            
-        var faker = new ProductDetails().GetBogusFaker();
+    {
+        var faker = ProductDetailsExtensions.ProductDetailsFaker;
 
         foreach (var product in faker.GenerateLazy(50))
         {

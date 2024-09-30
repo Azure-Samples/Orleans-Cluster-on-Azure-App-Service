@@ -4,6 +4,7 @@
 namespace Orleans.ShoppingCart.Abstractions;
 
 [GenerateSerializer, Immutable]
+[Alias("Orleans.ShoppingCart.Abstractions.CartItem")]
 public sealed record class CartItem(
     string UserId,
     int Quantity,
