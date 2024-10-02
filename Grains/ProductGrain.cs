@@ -47,6 +47,7 @@ internal class ProductGrain : Grain, IProductGrain
 
     private async Task UpdateStateAsync(ProductDetails product)
     {
+        ArgumentNullException.ThrowIfNull(product.Id);
         var oldCategory = _product.State.Category;
 
         _product.State = product;

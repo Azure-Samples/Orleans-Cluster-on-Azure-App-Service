@@ -22,6 +22,7 @@ public sealed class InventoryGrain : Grain, IInventoryGrain
 
     async Task IInventoryGrain.AddOrUpdateProductAsync(ProductDetails product)
     {
+        ArgumentNullException.ThrowIfNull(product.Id);
         _productIds.State.Add(product.Id);
         _productCache[product.Id] = product;
 

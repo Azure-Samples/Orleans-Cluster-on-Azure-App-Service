@@ -16,6 +16,7 @@ public sealed class ShoppingCartGrain : Grain, IShoppingCartGrain
 
     async Task<bool> IShoppingCartGrain.AddOrUpdateItemAsync(int quantity, ProductDetails product)
     {
+        ArgumentNullException.ThrowIfNull(product.Id);
         var products = GrainFactory.GetGrain<IProductGrain>(product.Id);
    
         int? adjustedQuantity = null;
@@ -29,7 +30,10 @@ public sealed class ShoppingCartGrain : Grain, IShoppingCartGrain
         if (isAvailable && claimedProduct is not null)
         {
             var item = ToCartItem(quantity, claimedProduct);
-            _cart.State[claimedProduct.Id] = item;
+            if (!string.IsNullOrEmpty(claimedProduct.Id))
+            {
+                _cart.State[claimedProduct.Id] = item;
+            }
 
             await _cart.WriteStateAsync();
             return true;
@@ -52,6 +56,7 @@ public sealed class ShoppingCartGrain : Grain, IShoppingCartGrain
 
     async Task IShoppingCartGrain.RemoveItemAsync(ProductDetails product)
     {
+        ArgumentNullException.ThrowIfNull(product.Id);
         var products = GrainFactory.GetGrain<IProductGrain>(product.Id);
         await products.ReturnProductAsync(product.Quantity);
 

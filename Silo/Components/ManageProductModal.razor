@@ -63,7 +63,7 @@
 
     public void Close() => MudDialog?.Cancel();
 
-    private void Bogus() => Product = Product.GetBogusFaker().Generate();
+    private void Bogus() => Product = ProductDetailsExtensions.ProductDetailsFaker.Generate();
 
     private Task Save()
     {
