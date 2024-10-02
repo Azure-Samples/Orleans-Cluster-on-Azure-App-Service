@@ -67,7 +67,7 @@
 
     async Task AddToCartAsync(string productId)
     {
-        if (OnAddedToCart is { HasDelegate: true} onAddedToCart)
+        if (OnAddedToCart is { HasDelegate: true } onAddedToCart)
         {
             await onAddedToCart.InvokeAsync(productId);
         }
