@@ -1,26 +1,22 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT License.
-
+using System.Linq;
 namespace Orleans.ShoppingCart.Silo.Services;
 
-public sealed class InventoryService : BaseClusterService
+public sealed class InventoryService(IClusterClient client)
 {
-    public InventoryService(
-        IHttpContextAccessor httpContextAccessor, IClusterClient client) :
-        base(httpContextAccessor, client)
-    {
-    }
-
     public async Task<HashSet<ProductDetails>> GetAllProductsAsync()
     {
-        var getAllProductsTasks = Enum.GetValues<ProductCategory>()
-            .Select(category =>
-                _client.GetGrain<IInventoryGrain>(category.ToString()))
-            .Select(grain => grain.GetAllProductsAsync())
-            .ToList();
+        var allProducts = new HashSet<ProductDetails>();
 
-        var allProducts = await Task.WhenAll(getAllProductsTasks);
+        foreach (var category in Enum.GetNames<ProductCategory>())
+        {
+            await foreach (var product in client.GetGrain<IInventoryGrain>(category).GetAllProductsAsync())
+            {
+                allProducts.Add(product);
+            }
+        }
 
-        return new HashSet<ProductDetails>(allProducts.SelectMany(products => products));
+        return allProducts;
     }
 }

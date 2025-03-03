@@ -4,57 +4,67 @@
 namespace Orleans.ShoppingCart.Grains;
 
 [Reentrant]
-public sealed class InventoryGrain : Grain, IInventoryGrain
-{
-    private readonly IPersistentState<HashSet<string>> _productIds;
-    private readonly Dictionary<string, ProductDetails> _productCache = new();
-
-    public InventoryGrain(
-        [PersistentState(
+internal sealed class InventoryGrain(
+    [PersistentState(
             stateName: "Inventory",
             storageName: "shopping-cart")]
-        IPersistentState<HashSet<string>> state) => _productIds = state;
+        IPersistentState<HashSet<string>> state) : Grain, IInventoryGrain
+{
+    private readonly Dictionary<string, ProductDetails> _productCache = [];
+    private readonly StateManager _stateManager = new(state);
 
-    public override Task OnActivateAsync(CancellationToken cancellationToken) => PopulateProductCacheAsync(cancellationToken);
+    public override async Task OnActivateAsync(CancellationToken cancellationToken) => await PopulateProductCacheAsync(cancellationToken);
 
-    Task<HashSet<ProductDetails>> IInventoryGrain.GetAllProductsAsync() =>
-        Task.FromResult(_productCache.Values.ToHashSet());
+    public ValueTask<int> GetProductCount() => new(_productCache.Count);
 
-    async Task IInventoryGrain.AddOrUpdateProductAsync(ProductDetails product)
+    public async IAsyncEnumerable<ProductDetails> GetAllProductsAsync()
     {
-        ArgumentNullException.ThrowIfNull(product.Id);
-        _productIds.State.Add(product.Id);
-        _productCache[product.Id] = product;
+        // We await this to make the compiler happy.
+        await Task.CompletedTask;
 
-        await _productIds.WriteStateAsync();
+        var values = _productCache.Values.ToList();
+        foreach (var value in values)
+        {
+            yield return value;
+        }
     }
 
-    public async Task RemoveProductAsync(string productId)
+    public async ValueTask AddOrUpdateProductAsync(ProductDetails product)
     {
-        _productIds.State.Remove(productId);
+        ArgumentNullException.ThrowIfNull(product.Id);
+        state.State.Add(product.Id);
+        _productCache[product.Id] = product;
+
+        await _stateManager.WriteStateAsync();
+    }
+
+    public async ValueTask RemoveProductAsync(string productId)
+    {
+        state.State.Remove(productId);
         _productCache.Remove(productId);
 
-        await _productIds.WriteStateAsync();
+        await _stateManager.WriteStateAsync();
     }
 
     private async Task PopulateProductCacheAsync(CancellationToken cancellationToken)
     {
-        if (_productIds is not { State.Count: > 0 })
+        if (state is not { State.Count: > 0 })
         {
             return;
         }
-        
+
         await Parallel.ForEachAsync(
-            _productIds.State, // Explicitly use the current task-scheduler.
+            state.State,
             new ParallelOptions
             {
                 TaskScheduler = TaskScheduler.Current,
                 CancellationToken = cancellationToken,
+                MaxDegreeOfParallelism = 32,
             },
-            async (id, _) =>
+            async (id, ct) =>
             {
                 var productGrain = GrainFactory.GetGrain<IProductGrain>(id);
-                _productCache[id] = await productGrain.GetProductDetailsAsync();
+                _productCache[id] = await productGrain.GetProductDetailsAsync().WaitAsync(ct);
             });
     }
 }

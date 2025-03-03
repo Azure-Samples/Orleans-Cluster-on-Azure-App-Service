@@ -4,10 +4,12 @@
 namespace Orleans.ShoppingCart.Abstractions;
 
 public interface IInventoryGrain : IGrainWithStringKey
-{    
-    Task<HashSet<ProductDetails>> GetAllProductsAsync();
+{
+    ValueTask<int> GetProductCount();
+
+    IAsyncEnumerable<ProductDetails> GetAllProductsAsync();
     
-    Task AddOrUpdateProductAsync(ProductDetails productDetails);
+    ValueTask AddOrUpdateProductAsync(ProductDetails productDetails);
     
-    Task RemoveProductAsync(string productId);
+    ValueTask RemoveProductAsync(string productId);
 }

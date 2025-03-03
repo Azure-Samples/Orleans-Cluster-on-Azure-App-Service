@@ -64,20 +64,17 @@ public partial class MainLayout
         {
             ToastService.OnToastedRequested += OnToastRequested;
 
-            if (await LocalStorage.GetItemAsync(PrefersDarkThemeKey)
-                is { Length: > 0 } isDarkTheme &&
-                bool.TryParse(isDarkTheme, out var parsedValue))
-            {
-                _isDarkTheme = parsedValue;
-            }
+            _isDarkTheme = await LocalStorage.GetItemAsync<bool>(PrefersDarkThemeKey);
 
             await base.OnAfterRenderAsync(firstRender);
         }
     }
 
-    async Task OnToggledChangedAsync(bool value) =>
-        await LocalStorage.SetItemAsync(
-            PrefersDarkThemeKey, (_isDarkTheme = value).ToString());
+    async Task OnToggledChangedAsync(bool value)
+    {
+        _isDarkTheme = value;
+        await LocalStorage.SetItemAsync(PrefersDarkThemeKey, value);
+    }
 
     Task OnToastRequested((string Title, string Message) tuple) =>
         InvokeAsync(() =>

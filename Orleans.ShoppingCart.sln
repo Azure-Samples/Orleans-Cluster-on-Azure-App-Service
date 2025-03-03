@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		.github\workflows\flex\app-service.bicep = .github\workflows\flex\app-service.bicep
 		.github\workflows\deploy.yml = .github\workflows\deploy.yml
+		Directory.Packages.props = Directory.Packages.props
 		global.json = global.json
 		.github\workflows\flex\logs-and-insights.bicep = .github\workflows\flex\logs-and-insights.bicep
 		.github\workflows\flex\main.bicep = .github\workflows\flex\main.bicep

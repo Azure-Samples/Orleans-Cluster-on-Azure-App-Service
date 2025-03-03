@@ -1,3 +1,5 @@
+@using MudBlazor
+
 <MudDialog>
     <DialogContent>
         <MudForm @ref="_form" Model=@Product autocomplete="off">
@@ -42,7 +44,7 @@
 
     public ProductDetails Product { get; set; } = new();
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = null!;
 
     [Parameter, EditorRequired]
     public EventCallback<ProductDetails> ProductUpdated { get; set; }
@@ -50,8 +52,8 @@
     [Inject]
     public IDialogService DialogService { get; set; } = null!;
 
-    public void Open(string title, Func<ProductDetails, Task> onProductUpdated) =>
-        DialogService.Show<ManageProductModal>(
+    public async Task OpenAsync(string title, Func<ProductDetails, Task> onProductUpdated) =>
+        await DialogService.ShowAsync<ManageProductModal>(
             title, new DialogParameters()
             {
                 { 

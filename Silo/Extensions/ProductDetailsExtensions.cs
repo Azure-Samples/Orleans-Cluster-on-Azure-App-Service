@@ -8,7 +8,7 @@ internal static class ProductDetailsExtensions
     internal static readonly Faker<ProductDetails> ProductDetailsFaker =
         new Faker<ProductDetails>()
             .StrictMode(true)
-            .RuleFor(p => p.Id, (f, p) => f.Random.Number(1, 100_000).ToString())
+            .RuleFor(p => p.Id, (f, p) => f.IndexGlobal.ToString())
             .RuleFor(p => p.Name, (f, p) => f.Commerce.ProductName())
             .RuleFor(p => p.Description, (f, p) => f.Lorem.Sentence())
             .RuleFor(p => p.UnitPrice, (f, p) => decimal.Parse(f.Commerce.Price(max: 170)))
