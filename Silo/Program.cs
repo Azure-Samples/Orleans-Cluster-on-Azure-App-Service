@@ -3,6 +3,8 @@
 
 using Azure.Data.Tables;
 using Azure.Identity;
+using Microsoft.AspNetCore.Authentication;
+using Orleans.ShoppingCart.Silo.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,10 +59,21 @@ var services = builder.Services;
 services.AddMudServices();
 services.AddRazorPages();
 services.AddServerSideBlazor();
+services
+    .AddAuthentication(AppServiceAuthenticationDefaults.AuthenticationScheme)
+    .AddScheme<AuthenticationSchemeOptions, AppServiceAuthenticationHandler>(
+        AppServiceAuthenticationDefaults.AuthenticationScheme,
+        _ => { });
+services.AddAuthorization(options =>
+    options.AddPolicy(
+        AuthorizationPolicies.ProductManagement,
+        policy => policy
+            .RequireAuthenticatedUser()
+            .RequireRole(AuthorizationPolicies.ProductAdministratorRole)));
 services.AddHttpContextAccessor();
 services.AddSingleton<ShoppingCartService>();
 services.AddSingleton<InventoryService>();
-services.AddSingleton<ProductService>();
+services.AddScoped<ProductService>();
 services.AddScoped<ComponentStateChangedObserver>();
 services.AddSingleton<ToastService>();
 services.AddLocalStorageServices();
@@ -88,6 +101,8 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

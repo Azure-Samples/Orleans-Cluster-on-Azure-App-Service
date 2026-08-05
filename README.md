@@ -44,6 +44,30 @@ The app is architected as follows:
 2. `cd orleans-on-app-service`
 3. `dotnet run --project Silo\Orleans.ShoppingCart.Silo.csproj`
 
+Product management is restricted to Microsoft Entra users assigned the
+`ProductAdministrator` app role. Local runs do not receive the trusted
+`X-MS-CLIENT-PRINCIPAL` header from Azure App Service, so the product management
+page remains unavailable locally by default.
+
+### Product management authorization
+
+Before deploying, create a Microsoft Entra app registration with:
+
+- A Web redirect URI of
+  `https://<app-name>.azurewebsites.net/.auth/login/aad/callback`.
+  Register the corresponding staging-slot callback URI if the staging slot is
+  used.
+- An app role whose value is `ProductAdministrator`, assigned only to catalog
+  administrators.
+- A client secret.
+
+Configure these repository-level GitHub Actions secrets:
+`AUTHENTICATION_TENANT_ID`, `AUTHENTICATION_CLIENT_ID`, and
+`AUTHENTICATION_CLIENT_SECRET`. The deployment enables App Service
+Authentication while leaving the storefront anonymous. The application only
+shows and permits product management when App Service supplies an authenticated
+principal with the `ProductAdministrator` role.
+
 ### Acknowledgements
 
 The Orleans.ShoppingCart.Silo project uses the following open 3rd party-source projects:

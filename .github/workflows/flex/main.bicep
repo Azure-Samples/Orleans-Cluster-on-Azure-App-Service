@@ -1,5 +1,9 @@
 param appName string
 param location string = resourceGroup().location
+param tenantId string
+param authenticationClientId string
+@secure()
+param authenticationClientSecret string
 
 module storageModule 'storage.bicep' = {
   name: 'orleansStorageModule'
@@ -24,7 +28,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   properties: {
     addressSpace: {
       addressPrefixes: [
-        '172.17.0.0/16',
+        '172.17.0.0/16'
         '192.168.0.0/16'
       ]
     }
@@ -71,5 +75,8 @@ module siloModule 'app-service.bicep' = {
     appInsightsConnectionString: logsModule.outputs.appInsightsConnectionString
     appInsightsInstrumentationKey: logsModule.outputs.appInsightsInstrumentationKey
     storageConnectionString: storageModule.outputs.connectionString
+    tenantId: tenantId
+    authenticationClientId: authenticationClientId
+    authenticationClientSecret: authenticationClientSecret
   }
 }

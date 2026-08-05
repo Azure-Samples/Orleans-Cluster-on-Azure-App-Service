@@ -5,14 +5,31 @@ namespace Orleans.ShoppingCart.Silo.Services;
 
 public sealed class ProductService : BaseClusterService
 {
+    private readonly IAuthorizationService _authorizationService;
+
     public ProductService(
-        IHttpContextAccessor httpContextAccessor, IClusterClient client) :
+        IHttpContextAccessor httpContextAccessor,
+        IClusterClient client,
+        IAuthorizationService authorizationService) :
         base(httpContextAccessor, client)
     {
+        _authorizationService = authorizationService;
     }
 
-    public Task CreateOrUpdateProductAsync(ProductDetails product) =>
-        _client.GetGrain<IProductGrain>(product.Id).CreateOrUpdateProductAsync(product);
+    public async Task CreateOrUpdateProductAsync(
+        ProductDetails product,
+        ClaimsPrincipal user)
+    {
+        var authorizationResult = await _authorizationService.AuthorizeAsync(
+            user,
+            AuthorizationPolicies.ProductManagement);
+        if (!authorizationResult.Succeeded)
+        {
+            throw new UnauthorizedAccessException("Product management authorization is required.");
+        }
+
+        await _client.GetGrain<IProductGrain>(product.Id).CreateOrUpdateProductAsync(product);
+    }
 
     public Task<(bool IsAvailable, ProductDetails? ProductDetails)> TryTakeProductAsync(
         string productId, int quantity) =>
