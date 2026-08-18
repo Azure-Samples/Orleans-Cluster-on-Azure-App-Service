@@ -1,5 +1,6 @@
 @page "/products/{id?}"
 @using MudBlazor
+@attribute [Authorize(Policy = AuthorizationPolicies.ProductManagement)]
 
 <ProductTable Title="Product Management" Products=@_products EditProduct=@OnEditProduct>
     <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add"

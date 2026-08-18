@@ -30,13 +30,19 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     
     - name: Flex bicep
+      env:
+        AUTHENTICATION_TENANT_ID: ${{ secrets.AUTHENTICATION_TENANT_ID }}
+        AUTHENTICATION_CLIENT_ID: ${{ secrets.AUTHENTICATION_CLIENT_ID }}
+        AUTHENTICATION_CLIENT_SECRET: ${{ secrets.AUTHENTICATION_CLIENT_SECRET }}
       run: |
         az deployment group create \
           --resource-group ${{ env.AZURE_RESOURCE_GROUP_NAME }} \
           --template-file '.github/workflows/flex/main.bicep' \
           --parameters location=${{ env.AZURE_RESOURCE_GROUP_LOCATION }} \
             appName=${{ env.UNIQUE_APP_NAME }} \
-          --debug
+            tenantId="$AUTHENTICATION_TENANT_ID" \
+            authenticationClientId="$AUTHENTICATION_CLIENT_ID" \
+            authenticationClientSecret="$AUTHENTICATION_CLIENT_SECRET"
 
     - name: Webapp deploy
       run: |

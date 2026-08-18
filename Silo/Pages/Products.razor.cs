@@ -20,6 +20,9 @@ public sealed partial class Products
     public ProductService ProductService { get; set; } = null!;
 
     [Inject]
+    public AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
+
+    [Inject]
     public IDialogService DialogService  { get; set; } = null!;
 
     protected override async Task OnInitializedAsync() =>
@@ -42,7 +45,8 @@ public sealed partial class Products
             ImageUrl = fake.ImageUrl,
             DetailsUrl = fake.DetailsUrl
         };
-        await ProductService.CreateOrUpdateProductAsync(product);
+        var authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        await ProductService.CreateOrUpdateProductAsync(product, authenticationState.User);
         _products = await InventoryService.GetAllProductsAsync();
 
         _modal?.Close();
