@@ -1,6 +1,8 @@
 # Microsoft Orleans: Shopping Cart App
 
-[![Deploy to Azure App Service](https://github.com/Azure-Samples/Orleans-Cluster-on-Azure-App-Service/actions/workflows/deploy.yml/badge.svg)](https://github.com/Azure-Samples/Orleans-Cluster-on-Azure-App-Service/actions/workflows/deploy.yml)
+> [!IMPORTANT]
+> **This sample has moved and this repository will be archived.**
+> Use the actively maintained [Azure App Service deployment sample](https://github.com/dotnet/orleans/tree/main/samples/Deployment/AzureAppService) in `dotnet/orleans` instead. See the current deployment guidance for [Windows](https://dotnet.github.io/orleans/docs/deployment/deploy-to-azure-app-service/) or [Linux](https://dotnet.github.io/orleans/docs/deployment/deploy-to-azure-app-service-linux/).
 
 A canonical shopping cart sample application, built using Microsoft Orleans. This app shows the following features:
 
